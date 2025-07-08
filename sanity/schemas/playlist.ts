@@ -26,18 +26,18 @@ export default defineType({
       type: "string",
       title: "Description",
     }),
-    defineField({
+    {
       name: "blog",
       title: "Blog",
       type: "reference",
-      to: { type: "blog" },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
+      to: [{ type: "blog" }],
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
       name: "category",
       title: "Category",
       type: "array",
-      of: [{ type: "reference", to: { type: "category" } }],
-    }),
+      of: [{ type: "reference", to: [{ type: "category" }] }],
+    },
   ],
 })

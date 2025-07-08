@@ -22,23 +22,23 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      title: "Featured",
-      name: "featured",
-      type: "boolean",
+      name: "description",
+      type: "string",
+      title: "Description",
     }),
-    defineField({
-      name: "publishedAt",
-      title: "Published at",
-      type: "datetime",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
+    {
       name: "blog",
       title: "Blog",
       type: "reference",
-      to: { type: "blog" },
-      validation: (Rule) => Rule.required(),
-    }),
+      to: [{ type: "blog" }],
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
+      name: "category",
+      title: "Category",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "category" }] }],
+    },
     defineField({
       name: "mainImage",
       title: "Main image",
@@ -46,45 +46,16 @@ export default defineType({
       options: {
         hotspot: true,
       },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "iframeUrl",
-      title: "Podcast URL",
-      type: "url",
-      validation: (Rule) =>
-        Rule.uri({
-          scheme: ["http", "https"],
-        }),
+      name: "publishedAt",
+      title: "Published at",
+      type: "datetime",
     }),
     defineField({
-      name: "description",
-      type: "string",
-      title: "Description",
-    }),
-    defineField({
-      name: "body",
-      title: "Body",
+      name: "content",
+      title: "Content",
       type: "blockContent",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "category",
-      title: "Category",
-      type: "array",
-      of: [{ type: "reference", to: { type: "category" } }],
     }),
   ],
-
-  preview: {
-    select: {
-      title: "title",
-      author: "author.name",
-      media: "mainImage",
-    },
-    prepare(selection) {
-      const { author } = selection
-      return { ...selection, subtitle: author && `by ${author}` }
-    },
-  },
 })
