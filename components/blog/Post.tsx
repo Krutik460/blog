@@ -11,6 +11,8 @@ import { urlForImage } from "@/sanity/lib/image"
 import { customBlockComponents } from "@/components/blog/PortableTextComponent"
 import { PortableText } from "@portabletext/react"
 import { PortableTextBlock } from "sanity"
+import { ArticleStructuredData } from "@/components/StructuredData"
+import { siteConfig } from "@/config/site"
 
 export function Post({
   blogSlug,
@@ -20,9 +22,20 @@ export function Post({
   postInfo: PostDef
 }) {
   const { index, levels } = getIndex(postInfo.body as PortableTextBlock[])
+  const postUrl = `${siteConfig.url}/${blogSlug}/${postInfo.slug.current}`
+  const imageUrl = postInfo.mainImage
+    ? urlForImage(postInfo.mainImage).url()
+    : undefined
 
   return (
     <>
+      <ArticleStructuredData
+        title={postInfo.title}
+        description={postInfo.description}
+        publishedAt={postInfo.publishedAt}
+        imageUrl={imageUrl}
+        url={postUrl}
+      />
       <article className="container relative max-w-3xl py-6 lg:py-10">
         <Link
           href={`/${blogSlug}`}
@@ -85,7 +98,7 @@ export function Post({
               {!postInfo.iframeUrl && (
                 <Image
                   src={urlForImage(postInfo.mainImage).url()}
-                  alt="test"
+                  alt={postInfo.mainImage.alt || postInfo.title}
                   width={720}
                   height={405}
                   className="my-8 rounded-md border bg-muted transition-colors"

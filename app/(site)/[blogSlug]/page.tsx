@@ -8,6 +8,7 @@ import { blogQuery, postsQuery } from "@/sanity/lib/queries"
 import { sanityFetch, token } from "@/sanity/lib/sanityFetch"
 import PreviewProvider from "@/components/PreviewProvider"
 import PreviewBlog from "@/components/blog/PreviewBlog"
+import { siteConfig } from "@/config/site"
 
 interface BlogPageProps {
   params: {
@@ -35,9 +36,36 @@ export async function generateMetadata({
     return {}
   }
 
+  const url = `${siteConfig.url}/${params.blogSlug}`
+
   return {
     title: blog.title,
     description: blog.description,
+    authors: [{ name: siteConfig.author.name }],
+    openGraph: {
+      title: blog.title,
+      description: blog.description,
+      type: "website",
+      url,
+      images: [
+        {
+          url: siteConfig.ogImage,
+          width: 1200,
+          height: 630,
+          alt: blog.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: blog.title,
+      description: blog.description,
+      images: [siteConfig.ogImage],
+      creator: siteConfig.author.twitter,
+    },
+    alternates: {
+      canonical: url,
+    },
   }
 }
 
@@ -54,7 +82,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
     query: postsQuery,
     params: { _id: blog._id },
   })
-  const isDraftMode = draftMode().isEnabled
+  const { isEnabled: isDraftMode } = await draftMode()
 
   if (isDraftMode && token) {
     return (

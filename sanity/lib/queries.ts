@@ -25,21 +25,26 @@ export const postsQuery = groq`*[_type == "post" && blog._ref == $_id] | order(p
   slug,
   publishedAt,
   blog,
-  mainImage,
-  alt,
+  mainImage{
+    asset,
+    alt
+  },
+  description,
   body
 }`
 
 // Get a single post by its slug
-// Get all post for a blog
 export const postQuery = groq`*[_type == "post" && slug.current == $slug][0]{
   _id,
   title,
   slug,
   publishedAt,
-  mainImage,
+  mainImage{
+    asset,
+    alt
+  },
   iframeUrl,
-  alt,
+  description,
   blog,
   body
 }`

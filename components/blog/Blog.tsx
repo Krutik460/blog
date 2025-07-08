@@ -55,7 +55,7 @@ export function Blog({
                   {post.mainImage && (
                     <Image
                       src={urlForImage(post.mainImage).url()}
-                      alt=""
+                      alt={post.mainImage.alt || post.title}
                       width={804}
                       height={452}
                       className="rounded-md border bg-muted transition-colors"

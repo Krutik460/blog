@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Block access to admin/studio routes
+Disallow: /studio/
+
+# Block access to API routes that shouldn't be indexed
+Disallow: /api/
+
+# Allow access to sitemap
+Sitemap: https://krutik.dev/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1 

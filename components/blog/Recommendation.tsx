@@ -1,6 +1,7 @@
 "use client"
 
 import { useSearchParams, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 import Link from "next/link"
 
@@ -30,13 +31,44 @@ const getFilteredData = async (filter: string) => {
   }
 }
 
-export async function Recommendation() {
+export function Recommendation() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const filter = searchParams.get("filter") || ""
+  
+  const [category, setCategory] = useState<CategoryDef[]>([])
+  const [filterData, setFilterData] = useState<PostDef[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const category: CategoryDef[] = await client.fetch(categoryQuery)
-  const filterData: PostDef[] = await getFilteredData(filter)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [categoryData, filteredData] = await Promise.all([
+          client.fetch(categoryQuery),
+          getFilteredData(filter)
+        ])
+        setCategory(categoryData)
+        setFilterData(filteredData)
+      } catch (error) {
+        console.error("Error fetching data:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [filter])
+
+  if (loading) {
+    return (
+      <div className="pb-6 lg:pb-10">
+        <div className="flex flex-col">
+          <Separator className="mb-4 mt-2 sm:mt-8" />
+          <p>Loading recommendations...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="pb-6 lg:pb-10">

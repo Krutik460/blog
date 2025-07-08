@@ -1,6 +1,27 @@
 import { Icons } from "@/components/Icons"
+import Image from "next/image"
+import { urlForImage } from "@/sanity/lib/image"
 
 export const customBlockComponents = {
+  types: {
+    image: ({ value }: any) => (
+      <div className="my-8">
+        <Image
+          src={urlForImage(value).url()}
+          alt={value.alt || "Article image"}
+          width={800}
+          height={400}
+          className="rounded-lg"
+          style={{ width: "100%", height: "auto" }}
+        />
+        {value.caption && (
+          <p className="mt-2 text-center text-sm text-muted-foreground">
+            {value.caption}
+          </p>
+        )}
+      </div>
+    ),
+  },
   marks: {
     // Ex. 2: rendering a custom `link` annotation
     link: ({ value, children }: any) => {
@@ -12,6 +33,7 @@ export const customBlockComponents = {
           className="ont-medium underline underline-offset-4"
           href={value?.href}
           target={target}
+          rel={target === "_blank" ? "noopener noreferrer" : undefined}
         >
           <Icons.link className="mr-1 inline h-4 w-4" />
           {children}
@@ -70,12 +92,11 @@ export const customBlockComponents = {
     ),
   },
   list: {
-    // Ex. 1: customizing common list types
     bullet: ({ children }: any) => (
-      <ul className="my-6 ml-6 list-disc">{children}</ul>
+      <ul className="my-6 ml-6 list-disc [&>li]:mt-2">{children}</ul>
     ),
     number: ({ children }: any) => (
-      <ol className="my-6 ml-6 list-decimal">{children}</ol>
+      <ol className="my-6 ml-6 list-decimal [&>li]:mt-2">{children}</ol>
     ),
   },
 }

@@ -23,7 +23,9 @@ export type PostDef = {
     slug: string
     title: string
   }
-  mainImage: Image
+  mainImage: Image & {
+    alt?: string
+  }
   iframeUrl: string
   description: string
   body: PortableTextBlock[]
