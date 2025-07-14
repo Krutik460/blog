@@ -53,9 +53,15 @@ export default defineType({
       type: "datetime",
     }),
     defineField({
-      name: "content",
-      title: "Content",
+      name: "body",
+      title: "Body",
       type: "blockContent",
+    }),
+    defineField({
+      name: "featured",
+      title: "Featured",
+      type: "boolean",
+      description: "Mark this post as featured",
     }),
   ],
 })
